@@ -1,4 +1,4 @@
-# Mallow: Configurable algo trading bot for Node/Bun 🤖
+# Mallow: Configurable algo trading bot
 - Binance conncetors
 - Assemble various indicators into a data pipeline
 - Issue sell/buy signals depending on indicator data (aka custom strategies)
@@ -36,4 +36,6 @@ Running the bot: `bun scripts/run.js`
 - Add (back) support for Hive Engine exchange
 
 ---
+
+![eponymous](https://github.com/numasi/mallow/blob/main/hober_mallow.jpg?raw=true)
 
