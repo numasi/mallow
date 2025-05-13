@@ -1,0 +1,5 @@
+datasource
+data
+.env
+node_modules
+bun.lock

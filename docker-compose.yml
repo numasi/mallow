@@ -1,0 +1,8 @@
+services:
+  mallow:
+    image: "oven/bun:alpine"
+    container_name: mallow
+    ports: ["5000:5000"]
+    volumes: 
+      - ./:/home/bun/app
+    entrypoint: sh -c "bun install && tail -f /dev/null"

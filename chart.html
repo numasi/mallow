@@ -1,0 +1,112 @@
+<div style="display: inline-block; position: relative; width: 5000px;">
+  <canvas id="chart"></canvas>
+  <canvas id="chart2"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  function signals(row) {
+    if (row.signal === 'SELL')
+      return 'red'
+    if (row.signal === 'BUY')
+      return 'green'
+
+    return 'white'
+  }
+
+  function actions(row) {
+    const action = row.action
+    if (action === 'SELL')
+      return 'red'
+    if (action === 'FSELL')
+      return 'pink'
+    if (action === 'BUY')
+      return 'green'
+    if (action === 'FBUY')
+      return 'lightgreen'
+    
+    return 'white'
+  }
+
+  (async function fetchNGo() {
+    let data = await fetch("./data")
+    data = await data.text()
+    data = data.split('\n')
+    const annotation = data[0].split(' ')
+    data = data.slice(1, -1)
+    data = data.map(line => 
+      annotation.reduce((acc, label, i) => ({ [label]: line.split(' ')[i], ...acc}), {}))
+    const ctx = document.getElementById('chart')
+    const ctx2 = document.getElementById('chart2')
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map(line => line.timestamp),
+        datasets: [
+          {
+            label: 'Typical price',
+            data: data.map(line => line.typical),
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.2
+          },
+          {
+            label: 'Short HMA',
+            data: data.map(line => line.shortHMA),
+            fill: false,
+            borderColor: 'rgb(124, 120, 21)',
+            tension: 0.2,
+/*            segment: {
+              pointBorderColor: ctx => 
+            },*/
+            pointBackgroundColor: ctx => actions(data[ctx.index]),
+            pointStyle: ctx => data[ctx.index].action || data[ctx.index].signal ? 'point' : false
+           // pointBackgroundColor: ctx => console.log(ctx)
+          },
+          {
+            label: 'Long HMA',
+            data: data.map(line => line.longHMA),
+            fill: false,
+            borderColor: 'rgb(124, 120, 21)',
+            pointStyle: false,
+            tension: 0.2,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+        }
+      }
+    })
+
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: data.map(line => line.period),
+        datasets: [
+          {
+            label: 'HMA Speed',
+            data: data.map(line => line.speed),
+            fill: false,
+            borderColor: 'rgb(5, 120, 231)',
+            tension: 0.2
+          },
+          {
+            label: 'HMA Acceleration',
+            data: data.map(line => line.acc),
+            fill: false,
+            borderColor: 'rgb(55, 120, 31)',
+            tension: 0.2
+          },
+      ]
+      },
+      options: {
+        scales: {
+        }
+      }
+    })
+})()
+</script>
