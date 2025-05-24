@@ -22,11 +22,14 @@ docker compose up
 docker compose exec mallow sh
 ```
 
-For accessing localhost:5000/chart.html: `bunx nano-server`
+For accessing localhost:5000/chart.html:\
+`bunx nano-server`
 
-Extract some exchange data: `bun scripts/extract.js`
+Extract some exchange data:\
+`bun scripts/extract.js`
 
-Running the bot: `bun scripts/run.js`
+Running the bot:\
+`bun scripts/run.js`
 
 ---
 
